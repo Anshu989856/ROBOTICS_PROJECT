@@ -1,0 +1,16 @@
+# Ignore Virtual Environment
+cdpr_env/
+
+# Ignore Massive Model Weights
+checkpoints/
+*.pt
+
+# Ignore Image Datasets and Masks
+extracted_frames/
+extracted_frames_sam2/
+video_tracked_masks/
+perfect_masks/
+
+# Ignore Python Caches
+__pycache__/
+*.pyc
