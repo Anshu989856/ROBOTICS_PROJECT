@@ -3,7 +3,7 @@ import numpy as np
 import os
 
 # Load the original image and the AI's prediction
-orig_img = cv2.imread("extracted_frames/frame_0050.jpg")
+orig_img = cv2.imread("master_extracted_frames/baumer_video0048_f020.jpg")
 mask_img = cv2.imread("unet_prediction_test.png", cv2.IMREAD_GRAYSCALE)
 
 # Create a blank image with the same dimensions, colored Neon Green (BGR: 0, 255, 0)
