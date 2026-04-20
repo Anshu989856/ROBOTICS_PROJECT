@@ -26,9 +26,13 @@ class CableDataset(Dataset):
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
         
+        # Expand the 1-pixel cables so they survive the brutal 1920->256 downscale!
+        kernel = np.ones((7,7), np.uint8)
+        mask = cv2.dilate(mask, kernel, iterations=1)
+        
         # Resize to 256x256 for the U-Net architecture
         image = cv2.resize(image, (256, 256))
-        mask = cv2.resize(mask, (256, 256))
+        mask = cv2.resize(mask, (256, 256), interpolation=cv2.INTER_NEAREST)
         
         # Normalize and convert to PyTorch Tensors
         image = torch.from_numpy(image).permute(2, 0, 1).float() / 255.0
@@ -46,8 +50,8 @@ if __name__ == "__main__":
     criterion = TopologyPreservingLoss().to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
     
-    # Load the 400 augmented samples
-    dataset = CableDataset("augmented_dataset/images", "augmented_dataset/masks")
+    # Load the massive full-scale augmented dataset
+    dataset = CableDataset("master_augmented_dataset/images", "master_augmented_dataset/masks")
     dataloader = DataLoader(dataset, batch_size=16, shuffle=True)
     
     print(f"Loaded {len(dataset)} samples. Starting 10 Epochs...")
